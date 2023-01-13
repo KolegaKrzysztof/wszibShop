@@ -4,6 +4,7 @@ import pl.edu.wszib.shop.database.UserDB;
 import pl.edu.wszib.shop.gui.GUI;
 import pl.edu.wszib.shop.model.User;
 
+
 public class Core {
 
     final Authenticator authenticator = Authenticator.getInstance();
@@ -23,7 +24,7 @@ public class Core {
             switch (this.gui.showLoggingMenu()){
                 case "1":
                     this.authenticator.authenticate(this.gui.readLoginAndPassword());
-                    isRunning = this.authenticator.getLoggedUser() != null;
+                    isRunning = this.authenticator.getLoggedUser().isPresent();
                     counter++;
                     if(!isRunning){
                         System.out.println("Not authorized!!!");
@@ -31,8 +32,8 @@ public class Core {
                     break;
                 case "2": //user registration
                     User user = this.gui.readLoginAndPassword();
-                    if(userDB.findByLogin(user.getLogin()) == null){
-                        userDB.userAdd(user.getLogin(), user.getPassword() + authenticator.getSeed());
+                    if(this.userDB.findByLogin(user.getLogin()).isEmpty()){
+                        this.userDB.userAdd(user.getLogin(), user.getPassword() + this.authenticator.getSeed());
                     } else {
                         System.out.println("Login is taken !!!");
                     }
@@ -62,26 +63,17 @@ public class Core {
                     isRunning = false;
                     break;
                 case "5": //list users
-                    if(this.authenticator.getLoggedUser() != null && this.authenticator.
-                            getLoggedUser().getRole() == User.Role.ADMIN){
+                    if(this.authenticator.getLoggedUser().isPresent() && this.authenticator.
+                            getLoggedUser().get().getRole() == User.Role.ADMIN){
                         this.gui.listUsers();
                         break;
                     }
                 case "6"://change role
-                    if(this.authenticator.getLoggedUser() != null && this.authenticator.
-                            getLoggedUser().getRole() == User.Role.ADMIN){
-                        System.out.println("Whose login would you like to change: ");
-                        User user = this.userDB.findByLogin(this.gui.scanner.nextLine());
-                        if(user != null && !user.equals(this.authenticator.getLoggedUser())){
-                            this.gui.changeRole(user);
-                        } else {
-                            System.out.println("User doesn't exist or You tried to change your role.");
-                        }
-                        break;
-                    }
+                    this.gui.changeRole();
+                    break;
                 case "7"://modyfing number of units in stock
-                    if(this.authenticator.getLoggedUser() != null && this.authenticator.
-                            getLoggedUser().getRole() == User.Role.ADMIN){
+                    if(this.authenticator.getLoggedUser().isPresent() && this.authenticator.
+                            getLoggedUser().get().getRole() == User.Role.ADMIN){
                         this.gui.addUnits();
                     }
                     break;

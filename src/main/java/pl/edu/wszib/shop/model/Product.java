@@ -1,6 +1,6 @@
 package pl.edu.wszib.shop.model;
 
-sealed public class Product permits Laptop {
+sealed public class Product permits Laptop, Monitor, Keyboard {
     private String brand;
     private String model;
     private double price;
