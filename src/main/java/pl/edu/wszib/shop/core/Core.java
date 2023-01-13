@@ -56,7 +56,7 @@ public class Core {
                     break;
                 case "3": // logout
                     isRunning = false;
-                    this.authenticator.setLoggedUserToNull();
+                    this.authenticator.setLoggedUserToEmpty();
                     instace.start();
                     break;
                 case "4": // exit

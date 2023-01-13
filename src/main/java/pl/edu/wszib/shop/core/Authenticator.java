@@ -24,7 +24,7 @@ public class Authenticator {
         }
     }
 
-    public void setLoggedUserToNull(){
+    public void setLoggedUserToEmpty(){
         this.loggedUser = Optional.empty();
     } // method to logging out
 
