@@ -69,14 +69,17 @@ public class Core {
                         break;
                     }
                 case "6"://change role
-                    this.gui.changeRole();
-                    break;
+                    if(this.authenticator.getLoggedUser().isPresent() && this.authenticator.
+                            getLoggedUser().get().getRole() == User.Role.ADMIN) {
+                        this.gui.changeRole();
+                        break;
+                    }
                 case "7"://modyfing number of units in stock
                     if(this.authenticator.getLoggedUser().isPresent() && this.authenticator.
                             getLoggedUser().get().getRole() == User.Role.ADMIN){
                         this.gui.addUnits();
+                        break;
                     }
-                    break;
                 default:
                     System.out.println("Wrong choose !!");
                     break;
