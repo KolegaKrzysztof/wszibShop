@@ -2,7 +2,7 @@ package pl.edu.wszib.shop.gui;
 
 import pl.edu.wszib.shop.core.Authenticator;
 import pl.edu.wszib.shop.database.ProductDB;
-import pl.edu.wszib.shop.database.UserDB;
+import pl.edu.wszib.shop.database.UserDAO;
 import pl.edu.wszib.shop.model.Product;
 import pl.edu.wszib.shop.model.User;
 
@@ -12,7 +12,7 @@ import java.util.*;
 public class GUI {
 
     final Authenticator authenticator = Authenticator.getInstance();
-    final UserDB userDB = UserDB.getInstance();
+    final UserDAO userDAO = UserDAO.getInstance();
     final ProductDB productDB = ProductDB.getInstance();
 
     public final Scanner scanner = new Scanner(System.in);
@@ -73,7 +73,7 @@ public class GUI {
     }
 
     public void listUsers(){
-        List<User> copyOfUserDB = new ArrayList<>(this.userDB.getUsers());
+        List<User> copyOfUserDB = new ArrayList<>(this.userDAO.getUsers());
         copyOfUserDB.sort(new Comparator<User>() {
             @Override
             public int compare(User o1, User o2) {
@@ -149,7 +149,7 @@ public class GUI {
         if(this.authenticator.getLoggedUser().isPresent() && this.authenticator.
                 getLoggedUser().get().getRole() == User.Role.ADMIN) {
             System.out.println("Enter login whose role you would like to change: ");
-            Optional<User> user = this.userDB.findByLogin(this.scanner.nextLine());
+            Optional<User> user = this.userDAO.findByLogin(this.scanner.nextLine());
             if (user.isPresent() && !user.get().equals(this.authenticator.getLoggedUser().get())) {
                 this.changeRole(user.get());
             } else {

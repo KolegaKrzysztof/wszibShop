@@ -1,6 +1,6 @@
 package pl.edu.wszib.shop.core;
 
-import pl.edu.wszib.shop.database.UserDB;
+import pl.edu.wszib.shop.database.UserDAO;
 import pl.edu.wszib.shop.gui.GUI;
 import pl.edu.wszib.shop.model.User;
 
@@ -9,7 +9,7 @@ public class Core {
 
     final Authenticator authenticator = Authenticator.getInstance();
     final GUI gui = GUI.getInstance();
-    final UserDB userDB = UserDB.getInstance();
+    final UserDAO userDAO = UserDAO.getInstance();
 
     private static final Core instace = new Core();
 
@@ -32,8 +32,8 @@ public class Core {
                     break;
                 case "2": //user registration
                     User user = this.gui.readLoginAndPassword();
-                    if(this.userDB.findByLogin(user.getLogin()).isEmpty()){
-                        this.userDB.userAdd(user.getLogin(), user.getPassword() + this.authenticator.getSeed());
+                    if(this.userDAO.findByLogin(user.getLogin()).isEmpty()){
+                        this.userDAO.userAdd(user.getLogin(), user.getPassword() + this.authenticator.getSeed());
                     } else {
                         System.out.println("Login is taken !!!");
                     }
